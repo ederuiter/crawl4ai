@@ -144,13 +144,13 @@ def merge_chunks(
         word_token_ratio: Multiplier for word->token conversion
     """
     # Pre-tokenize all docs and store token counts
-    splitter = splitter or str.split
+    splitter = splitter or re.compile('(\s)').split
     token_counts = array('I')
     all_tokens: List[List[str]] = []
     total_tokens = 0
     
     for doc in docs:
-        tokens = doc.split()
+        tokens = splitter(doc)
         count = int(len(tokens) * word_token_ratio)
         if count:  # Skip empty docs
             token_counts.append(count)
@@ -183,7 +183,7 @@ def merge_chunks(
         curr_size += 1
 
     # Return only non-empty chunks
-    return [' '.join(chunk) for chunk in chunks if chunk]
+    return [''.join(chunk) for chunk in chunks if chunk]
 
 
 class VersionManager:

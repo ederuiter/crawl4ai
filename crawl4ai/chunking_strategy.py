@@ -48,7 +48,7 @@ class RegexChunking(ChunkingStrategy):
             patterns (list): A list of regular expression patterns to split text.
         """
         if patterns is None:
-            patterns = [r"\n\n"]  # Default split pattern
+            patterns = [r"(\n\n)"]  # Default split pattern
         self.patterns = patterns
 
     def chunk(self, text: str) -> list:

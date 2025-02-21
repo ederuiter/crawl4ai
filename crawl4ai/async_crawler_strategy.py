@@ -1353,7 +1353,10 @@ class AsyncPlaywrightCrawlerStrategy(AsyncCrawlerStrategy):
                     )
                     redirected_url = page.url
                 except Error as e:
-                    raise RuntimeError(f"Failed on navigating ACS-GOTO:\n{str(e)}")
+                    if 'net::ERR_ABORTED' in str(e):
+                        response = None
+                    else:
+                        raise RuntimeError(f"Failed on navigating ACS-GOTO:\n{str(e)}")
 
                 await self.execute_hook(
                     "after_goto", page, context=context, url=url, response=response, config=config
@@ -1729,6 +1732,7 @@ class AsyncPlaywrightCrawlerStrategy(AsyncCrawlerStrategy):
             None
         """
         try:
+            print(download)
             suggested_filename = download.suggested_filename
             download_path = os.path.join(self.browser_config.downloads_path, suggested_filename)
 
